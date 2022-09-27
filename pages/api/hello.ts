@@ -2,12 +2,32 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Data = {
-  name: string
+  id?: any;
+  title?: string;
+  pages?: string;
+  language?: string;
 }
 
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  res.status(200).json({ name: 'John Doe' })
+
+  if (req.method === 'GET') {
+    res.status(200)
+      .json({title: 'error'})
+  } else if (req.method === 'POST') {
+    const title = req.body.title
+    const pages = req.body.pages
+    const language = req.body.language
+    const newBook = {
+      id: Date.now(),
+      title,
+      pages,
+      language
+    }
+    console.log(newBook);
+    res.status(201)
+      .json(newBook)
+  }
 }
