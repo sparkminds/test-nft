@@ -1,18 +1,20 @@
+import { DirectoryTree } from "directory-tree";
+
 const COMMON_MAX_RARITY = 50;
 const SUPER_RARE_MAX_RARITY = 75;
 const RARE_MAX_RARITY = 95;
 const LEGENDARY_MAX_RARITY = 100;
 
-const randomElement = (list) => {
+const randomElement = (list: any) => {
   const _random = Math.floor(Math.random() * list.length);
   return list[_random];
 };
 
-const filterData = (data, name) => {
+const filterData = (data: DirectoryTree, name: string) => {
   return data?.children?.filter((x) => x?.name === name)[0]?.children;
 };
 
-const getRandomImage = (data) => {
+const getRandomImage = (data: DirectoryTree) => {
   const _random = Math.floor(Math.random() * LEGENDARY_MAX_RARITY);
   if (_random < COMMON_MAX_RARITY) {
     return randomElement(filterData(data, "common"));
@@ -25,15 +27,15 @@ const getRandomImage = (data) => {
   }
 };
 
-const getBackground = (treeBG) => {
+const getBackground = (treeBG: DirectoryTree) => {
   return getRandomImage(treeBG);
 };
 
-const getFace = (treeFace) => {
+const getFace = (treeFace: DirectoryTree) => {
   return getRandomImage(treeFace);
 };
 
-const getEyes = (treeEyes) => {
+const getEyes = (treeEyes: DirectoryTree) => {
   return getRandomImage(treeEyes);
 };
 

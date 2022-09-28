@@ -1,13 +1,11 @@
 import { RcFile } from "antd/lib/upload";
-import Image from "next/image";
 import React, { useCallback, useEffect, useState } from "react";
 
 interface IUploadImageProps {}
-const listLevevel = ["super_rare", "rare", "legendary", "common"];
-const listElement = ["background", "face", "left_eye"];
 const UploadImage: React.FunctionComponent<IUploadImageProps> = (props) => {
   const ref = React.useRef<HTMLInputElement>(null);
-  const [imgUrl, setImgUrl] = useState<string>();
+  const [imgUrl, setImgUrl] = useState<any[]>([]);
+  console.log("img", imgUrl);
   const [allFile, setAllFile] = useState<any>({});
   console.log(allFile);
 
@@ -27,22 +25,40 @@ const UploadImage: React.FunctionComponent<IUploadImageProps> = (props) => {
   }, [ref]);
 
   const handleChange = (e: any) => {
+    setImgUrl([]);
     setAllFile(e.target.files);
-    getBase64(e.target.files[0] as RcFile, (url) => {
-      setImgUrl(url);
-    });
   };
 
-  const obSubmitForm = async () => {
-    await fetch("http://localhost:8081/post-test", {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title: "21132132", pages: "1000" }),
-    });
-  };
+  useEffect(() => {
+    if (allFile && Object.keys(allFile).length > 0) {
+      Object.keys(allFile).forEach((item) => {
+        getBase64(allFile[item] as RcFile, (url) => {
+          setImgUrl((prev) => [
+            ...prev,
+            {
+              base64: url,
+              source: allFile[item]?.webkitRelativePath,
+            },
+          ]);
+        });
+      });
+    }
+  }, [allFile]);
+
+  const obSubmitForm = useCallback(async () => {
+    if (allFile && Object.keys(allFile).length > 0) {
+      await fetch("/api/hello", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          listFile: imgUrl,
+        }),
+      });
+    }
+  }, [allFile, imgUrl]);
 
   return (
     <>

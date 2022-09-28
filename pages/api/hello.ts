@@ -1,5 +1,6 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { createImage } from '../../utils/createImage';
+var ba64 = require("ba64");
 
 type Data = {
   id?: any;
@@ -8,26 +9,29 @@ type Data = {
   language?: string;
 }
 
+
+
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
 
   if (req.method === 'GET') {
-    res.status(200)
-      .json({title: 'error'})
+    res.status(500)
+      .json({ title: 'error' })
   } else if (req.method === 'POST') {
-    const title = req.body.title
-    const pages = req.body.pages
-    const language = req.body.language
-    const newBook = {
-      id: Date.now(),
-      title,
-      pages,
-      language
-    }
-    console.log(newBook);
+    createImage(req.body.listFile);
+    // fs.mkdir("Output", (err) => {
+    //   if (err) {
+    //     return console.error(err);
+    //   }
+    //   console.log("Directory created successfully!");
+    // });
+    // const base64String = req.body.listFile[0]?.base64;
+    // ba64.writeImageSync("C:/Users/ADMIN/Documents/Output/Background/img", base64String);
     res.status(201)
-      .json(newBook)
+      .json({
+        title: "Success"
+      })
   }
 }

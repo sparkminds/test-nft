@@ -1,24 +1,37 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { build } from '../../utils/generator';
 import dirTree from "directory-tree";
 type Data = {
-  status?: any;
+  status?: string;
 }
 
 const treeBG = dirTree("./public/images/input_images/background");
 const treeFace = dirTree("./public/images/input_images/face");
 const treeEyes = dirTree("./public/images/input_images/left_eye");
 
+var totalBG = 0;
+var totalFace = 0;
+var totalEyes = 0;
+
+treeBG.children?.forEach(item => {
+  return totalBG = totalBG + (item?.children?.length || 0)
+})
+
+treeFace.children?.forEach(item => {
+  return totalFace = totalFace + (item?.children?.length || 0)
+})
+
+treeEyes.children?.forEach(item => {
+  return totalEyes = totalEyes + (item?.children?.length || 0)
+})
 
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-
   var _thisIndex = 1;
-  const _maxSupply = 20;
+  const _maxSupply = (totalBG * totalFace * totalEyes);
   while (_thisIndex <= _maxSupply) {
     try {
       await build(

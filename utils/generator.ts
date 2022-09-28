@@ -1,17 +1,17 @@
+import { DirectoryTree } from "directory-tree";
 import { read } from "jimp";
 import { getBackground, getEyes, getFace } from "./traits";
 
-const sleep = (ms) => {
+const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-const build = async (index, onComplete, treeBG, treeFace, treeEyes) => {
+const build = async (index: number, onComplete: any, treeBG: DirectoryTree, treeFace: DirectoryTree, treeEyes: DirectoryTree) => {
   var _traits = [];
-  console.log("check indexxx", index);
+
   const background = getBackground(treeBG);
   const backgroundJimp = await read(
-    `../sparkminds-nft/public/images/input_images/background/${
-      background.path.split("\\")[4]
+    `../sparkminds-nft/public/images/input_images/background/${background.path.split("\\")[4]
     }/${background.name}`
   );
   _traits.push({
@@ -23,8 +23,7 @@ const build = async (index, onComplete, treeBG, treeFace, treeEyes) => {
 
   const face = getFace(treeFace);
   const faceJimp = await read(
-    `../sparkminds-nft/public/images/input_images/face/${
-      face.path.split("\\")[4]
+    `../sparkminds-nft/public/images/input_images/face/${face.path.split("\\")[4]
     }/${face.name}`
   );
   _traits.push({
@@ -36,8 +35,7 @@ const build = async (index, onComplete, treeBG, treeFace, treeEyes) => {
 
   const eye = getEyes(treeEyes);
   const eyesJimp = await read(
-    `../sparkminds-nft/public/images/input_images/left_eye/${
-      eye.path.split("\\")[4]
+    `../sparkminds-nft/public/images/input_images/left_eye/${eye.path.split("\\")[4]
     }/${eye.name}`
   );
   _traits.push({
@@ -54,3 +52,4 @@ const build = async (index, onComplete, treeBG, treeFace, treeEyes) => {
 };
 
 export { build };
+
