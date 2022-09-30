@@ -1,0 +1,155 @@
+.create {
+  padding: 80px 0;
+  &__title {
+    color: $whiteColor;
+    text-align: center;
+    font-size: 2rem;
+  }
+  &__sub-title {
+    text-align: center;
+    display: block;
+    color: #a0a0a0;
+  }
+  &__options {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    &__item {
+      border: 2px solid #1978f3;
+      border-radius: 8px;
+      padding: 22px 33px;
+      max-width: 342px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      & > h2 {
+        color: $whiteColor;
+        text-align: center;
+      }
+      &__desc {
+        text-align: center;
+        font-size: 0.875rem;
+        color: #a0a0a0;
+      }
+      img {
+        min-width: 75px !important;
+      }
+
+      & > .ant-btn {
+        height: 40px;
+        border-radius: 8px;
+        line-height: 32px;
+        background: linear-gradient(to right, #1978f3 0%, #00b4ff 100%);
+        border: none;
+        span {
+          font-size: 1rem;
+          font-weight: 600;
+          color: $whiteColor;
+        }
+      }
+    }
+  }
+
+  .step-1 {
+    padding: 30px 68px 32px;
+    border-radius: 8px;
+    max-width: 360px;
+    margin: 0 auto;
+    background-color: #1a1a1a;
+    & > h1 {
+      color: $grayColor;
+      font-size: 1.7rem;
+      text-align: center;
+    }
+    &__form {
+      form#nft-form {
+        .ant-form-item {
+          &-row {
+            flex-direction: column;
+            .ant-form-item-label {
+              text-align: left;
+              label {
+                color: #b3b3b3;
+                &::before,
+                &::after {
+                  display: none;
+                }
+              }
+            }
+          }
+          .ant-input {
+            padding: 10px 10px;
+            background-color: #3b3f44;
+            border: none;
+            color: #e3e3e3;
+            border-radius: 8px;
+          }
+          .ant-btn {
+            border: none;
+            border-radius: 13px;
+            height: 40px;
+            width: 60p;
+            background-color: linear-gradient(
+              to right,
+              #1978f3 0%,
+              #00b4ff 100%
+            );
+            span {
+              font-weight: 600;
+              font-size: 0.875rem;
+
+              color: $whiteColor;
+            }
+          }
+        }
+        & > .ant-form-item {
+          &:last-child {
+            padding-top: 20px;
+          }
+        }
+      }
+    }
+  }
+  .step-2 {
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      color: $grayColor;
+    }
+    p {
+      text-align: center;
+      color: #b3b3b3;
+    }
+    .upload-folder {
+      width: 330px;
+      height: 250px;
+      margin: 0 auto;
+
+      label {
+        cursor: pointer;
+        overflow: hidden;
+        display: block;
+        line-height: 250px;
+        border-radius: 8px;
+        border: 2px dotted #ccc;
+        background-color: #1a1a1a;
+        text-align: center;
+
+        color: #a0a0a0;
+        font-size: 1.5rem;
+      }
+      input {
+        display: none;
+      }
+
+      .anticon-cloud-upload {
+        font-size: 72px;
+        position: absolute;
+        left: 40%;
+        top: 60%;
+        font-size: 4.5rem;
+      }
+    }
+  }
+}

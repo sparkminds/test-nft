@@ -11,7 +11,7 @@ const build = async (index: number, onComplete: any, treeBG: DirectoryTree, tree
 
   const background = getBackground(treeBG);
   const backgroundJimp = await read(
-    `../sparkminds-nft/public/images/input_images/background/${background.path.split("\\")[4]
+    `./public/images/input_images/background/${background.path.split("\\")[4]
     }/${background.name}`
   );
   _traits.push({
@@ -23,7 +23,7 @@ const build = async (index: number, onComplete: any, treeBG: DirectoryTree, tree
 
   const face = getFace(treeFace);
   const faceJimp = await read(
-    `../sparkminds-nft/public/images/input_images/face/${face.path.split("\\")[4]
+    `./public/images/input_images/face/${face.path.split("\\")[4]
     }/${face.name}`
   );
   _traits.push({
@@ -35,7 +35,7 @@ const build = async (index: number, onComplete: any, treeBG: DirectoryTree, tree
 
   const eye = getEyes(treeEyes);
   const eyesJimp = await read(
-    `../sparkminds-nft/public/images/input_images/left_eye/${eye.path.split("\\")[4]
+    `./public/images/input_images/left_eye/${eye.path.split("\\")[4]
     }/${eye.name}`
   );
   _traits.push({
@@ -45,7 +45,7 @@ const build = async (index: number, onComplete: any, treeBG: DirectoryTree, tree
 
   _composedImage.blit(eyesJimp, 0, 0);
 
-  await _composedImage.write("Output/images/" + index + ".png");
+  await _composedImage.write("public/images/output_random_nft/" + index + ".png");
   await sleep(20);
 
   onComplete();

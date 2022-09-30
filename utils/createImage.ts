@@ -1,16 +1,17 @@
+import fs from 'fs';
 var ba64 = require("ba64");
+
 const createImage = (datas: any) => {
-    console.log('hello bro ');
     datas.forEach((data: any) => {
-        const source = data.source.split("/")[0]
-        const level = data.source.split("/")[1]
-        console.log('source, level', source, level);
-        switch (source) {
-            case level === 'common':
-                console.log('in common');
-                ba64.writeImageSync(`C:/Users/ADMIN/Documents/input_images/${source}/${level}/${Math.random()}`, data.base64)
-                break;
+        const source = data.source.split('/')[0];
+        const element = data.source.split('/')[1];
+        const level = data.source.split('/')[2];
+        if (fs.existsSync('public')) {
+            if (!fs.existsSync(`public/images/${source}/${element}/${level}`)) {
+                fs.mkdirSync(`public/images/${source}/${element}/${level}`, { recursive: true });
+            }
         }
+        ba64.writeImageSync(`public/images/${source}/${element}/${level}/${Math.floor(Math.random() * 10000)}`, data.base64)
     })
 
 }
