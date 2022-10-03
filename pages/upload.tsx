@@ -1,14 +1,14 @@
-import { Button } from "antd";
-import { RcFile } from "antd/lib/upload";
+import { Button, Steps } from "antd";
 import Image from "next/image";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import PreviewNFT from "../components/createNFT/preview";
 import StepOne from "../components/createNFT/step-1";
 import StepTwo from "../components/createNFT/step-2";
 import collection_icon from "../public/images/collection.png";
 import generate_icon from "../public/images/generate_collection.png";
 import { setStep } from "../redux/slice/createNFTSlice";
-
+import dirTree from "directory-tree";
 const optionsGenerate = [
   {
     title: "New Collection",
@@ -23,80 +23,39 @@ const optionsGenerate = [
     btnText: "Generate Collection",
   },
 ];
-interface IUploadImageProps {}
+interface IUploadImageProps {
+  tree?: any;
+  test?: any;
+}
 const UploadImage: React.FunctionComponent<IUploadImageProps> = (props) => {
+  console.log(
+    "props",
+    props.tree.children.filter((x: { name: string }) => !x.name.includes("."))
+  );
+  const { Step } = Steps;
   const dispatch = useDispatch();
-
-  const ref = React.useRef<HTMLInputElement>(null);
-
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const stepNFT = useSelector((state: any) => state.nft.step);
-
-  const [imgUrl, setImgUrl] = useState<any[]>([]);
-  const [allFile, setAllFile] = useState<any>({});
-
-  const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result as string));
-    if (img && img?.name) {
-      reader?.readAsDataURL(img);
-    }
-  };
-
-  React.useEffect(() => {
-    if (ref.current) {
-      ref.current.setAttribute("directory", "");
-      ref.current.setAttribute("webkitdirectory", "");
-    }
-  }, [ref]);
-
-  const handleChange = (e: any) => {
-    setImgUrl([]);
-    setAllFile(e.target.files);
-  };
-
-  useEffect(() => {
-    if (allFile && Object.keys(allFile).length > 0) {
-      Object.keys(allFile).forEach((item) => {
-        getBase64(allFile[item] as RcFile, (url) => {
-          setImgUrl((prev) => [
-            ...prev,
-            {
-              base64: url,
-              source: allFile[item]?.webkitRelativePath,
-            },
-          ]);
-        });
-      });
-    }
-  }, [allFile]);
-
-  const obSubmitForm = useCallback(async () => {
-    if (allFile && Object.keys(allFile).length > 0) {
-      await fetch("/api/upload", {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          listFile: imgUrl,
-        }),
-      });
-    }
-  }, [allFile, imgUrl]);
-
-  // const obSubmitForm = async () => {
-  //   await fetch("/api/generate");
-  // };
+  const result = useSelector((state: any) => state.nft.result);
 
   const handleChooseOption = (index: number) => {
     if (index === 0) {
       dispatch(setStep(1));
     }
     if (index === 1) {
-      dispatch(setStep(2));
+      dispatch(setStep(2.1));
     }
   };
+
+  useEffect(() => {
+    switch (stepNFT) {
+      case 2.2:
+        setCurrentStep(1);
+        break;
+      default:
+        setCurrentStep(0);
+    }
+  }, [stepNFT]);
 
   return (
     <>
@@ -124,13 +83,39 @@ const UploadImage: React.FunctionComponent<IUploadImageProps> = (props) => {
             </div>
           </>
         )}
-        {stepNFT === 2 && <StepOne />}
-        {stepNFT === 2.2 && <StepTwo />}
+        {stepNFT && (
+          <div className="step-nft">
+            <h1>Collection generator</h1>
+            <Steps size="small" current={currentStep} labelPlacement="vertical">
+              <Step title="Collection Details" />
+              <Step title="Generate Collection" />
+              <Step title="Upload Collection" />
+              <Step title="Deploy to chain" />
+              <Step title="Success!" />
+            </Steps>
+          </div>
+        )}
+        {stepNFT === 2.1 && <StepOne />}
+        {stepNFT === 2.2 && result.title !== "Success" && (
+          <StepTwo
+            tree={props.tree.children.filter(
+              (x: { name: string }) => !x.name.includes(".")
+            )}
+          />
+        )}
+        {result.title === "Success" && <PreviewNFT />}
       </div>
-      {/* <input type="file" ref={ref} onChange={(e) => handleChange(e)} />
-      <button onClick={() => dispatch(setStep(2))}>Upload</button> */}
     </>
   );
 };
+
+export async function getStaticProps() {
+  const tree = dirTree("./public/images");
+  return {
+    props: {
+      tree: tree,
+    },
+  };
+}
 
 export default UploadImage;

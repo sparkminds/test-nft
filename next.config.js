@@ -2,14 +2,24 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  handleImages: ['jpeg', 'png', 'svg', 'webp', 'gif'],
+  handleImages: ["jpeg", "png", "svg", "webp", "gif"],
   images: {
-    domains: ['ik.imagekit.io', 'media.pixxiti.com', 'firebasestorage.googleapis.com']
+    domains: [
+      "ik.imagekit.io",
+      "media.pixxiti.com",
+      "firebasestorage.googleapis.com",
+    ],
   },
   sassOptions: {
-    includePaths: ['./src'],
+    includePaths: ["./src"],
     prependData: `@import "./styles/variable.scss";@import "./styles/mixin.scss";`,
-},
-}
+  },
+  webpack5: true,
+  webpack: (config) => {
+    config.resolve.fallback = { fs: false };
 
-module.exports = nextConfig
+    return config;
+  },
+};
+
+module.exports = nextConfig;

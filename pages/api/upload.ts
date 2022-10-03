@@ -1,11 +1,8 @@
+import fs from 'fs';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createImage } from '../../utils/createImage';
-
 type Data = {
-  id?: any;
   title?: string;
-  pages?: string;
-  language?: string;
 }
 
 export default function handler(

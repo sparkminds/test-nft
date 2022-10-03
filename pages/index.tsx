@@ -6,7 +6,6 @@ import SliderBlog from "../components/landing/slider";
 import Support from "../components/landing/support";
 
 const Home: NextPage = () => {
-  console.log("check env", process.env.NEXT_PUBLIC_GREETING);
   return (
     <>
       <Banner />

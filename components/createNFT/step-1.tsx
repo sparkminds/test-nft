@@ -1,8 +1,10 @@
 import { Button, Form, Input } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setStep } from "../../redux/slice/createNFTSlice";
-interface StepOneProps {}
+interface StepOneProps {
+  tree?: any;
+}
 
 const StepOne: React.FunctionComponent<StepOneProps> = (props) => {
   const [form] = Form.useForm();
@@ -19,9 +21,6 @@ const StepOne: React.FunctionComponent<StepOneProps> = (props) => {
     setError(errorInfo);
   };
 
-  useEffect(() => {
-    console.log("hello", form.getFieldValue("contract"));
-  }, [form]);
   return (
     <div className="step-1">
       <h1>Collection Details</h1>
@@ -41,7 +40,7 @@ const StepOne: React.FunctionComponent<StepOneProps> = (props) => {
               { required: true, message: "Please input your contract name!" },
             ]}
           >
-            <Input />
+            <Input placeholder="MyNFTs" />
           </Form.Item>
           <Form.Item
             label="Collection Name"
@@ -50,14 +49,14 @@ const StepOne: React.FunctionComponent<StepOneProps> = (props) => {
               { required: true, message: "Please input your collection name!" },
             ]}
           >
-            <Input />
+            <Input placeholder="MyNFTs" />
           </Form.Item>
           <Form.Item
             label="Symbol"
             name="symbol"
             rules={[{ required: true, message: "Please input your symbol!" }]}
           >
-            <Input />
+            <Input placeholder="MyNFTs" />
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

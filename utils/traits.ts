@@ -35,8 +35,20 @@ const getFace = (treeFace: DirectoryTree) => {
   return getRandomImage(treeFace);
 };
 
-const getEyes = (treeEyes: DirectoryTree) => {
-  return getRandomImage(treeEyes);
+const getLeftEye = (treeLeftEye: DirectoryTree) => {
+  return getRandomImage(treeLeftEye);
 };
 
-export { getBackground, getEyes, getFace };
+const getRightEye = (treeRightEye: DirectoryTree) => {
+  return getRandomImage(treeRightEye);
+};
+
+const getMouth = (treeMouth: DirectoryTree) => {
+  return getRandomImage(treeMouth);
+};
+
+const getAccessory = (treeAccessory: DirectoryTree) => {
+  return getRandomImage(treeAccessory);
+};
+
+export { getBackground, getLeftEye, getFace, getMouth, getAccessory, getRightEye };

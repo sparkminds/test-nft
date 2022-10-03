@@ -5,16 +5,12 @@ interface UploadProps {}
 const Upload: React.FunctionComponent<UploadProps> = (props) => {
   const [fileImg, setFileImg] = useState<any>();
 
-  console.log("file image", fileImg);
-
   const sendFileToIPFS = async (e: any) => {
     e.preventDefault();
     if (fileImg) {
       try {
-        console.log("in try");
         const formData = new FormData();
         formData.append("file", fileImg);
-        console.log("file image in try", formData.get("file"));
         const res = await fetch(
           "https://api.pinata.cloud/pinning/pinFileToIPFS",
           {
@@ -28,9 +24,6 @@ const Upload: React.FunctionComponent<UploadProps> = (props) => {
             body: formData,
           }
         );
-        console.log("call api successs");
-
-        console.log("res", res);
       } catch (error) {
         console.log("Error sending File to IPFS: ");
         console.log(error);

@@ -1,22 +1,25 @@
-import { RcFile } from "antd/lib/upload";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setResult } from "../../redux/slice/createNFTSlice";
 
-interface StepTwoProps {}
+interface StepTwoProps {
+  tree?: any;
+}
 
 const StepTwo: React.FunctionComponent<StepTwoProps> = (props) => {
+  const dispatch = useDispatch();
   const ref = React.useRef<HTMLInputElement>(null);
 
-  const [imgUrl, setImgUrl] = useState<any[]>([]);
+  // const [imgUrl, setImgUrl] = useState<any[]>([]);
   const [allFile, setAllFile] = useState<any>({});
-  const [result, setResult] = useState<{ title: string }>();
 
-  const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result as string));
-    if (img && img?.name) {
-      reader?.readAsDataURL(img);
-    }
-  };
+  const toBase64 = (file: any) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
 
   useEffect(() => {
     if (ref.current) {
@@ -26,48 +29,47 @@ const StepTwo: React.FunctionComponent<StepTwoProps> = (props) => {
   }, [ref]);
 
   const handleChange = (e: any) => {
-    setImgUrl([]);
+    // setImgUrl([]);
     setAllFile(e.target.files);
+  };
+
+  const filesToBase64 = async (files: any[]) => {
+    const values = await Promise.all(files?.map((x) => toBase64(x)));
+
+    const _imgUrl = values.map((x, i) => ({
+      source: files[i]?.webkitRelativePath,
+      base64: x,
+    }));
+
+    // setImgUrl(_imgUrl);
+
+    if (_imgUrl && Object.keys(_imgUrl).length > 0) {
+      await fetch("/api/upload", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          listFile: _imgUrl,
+          tree: props.tree,
+        }),
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then(async (data) => {
+          dispatch(setResult(data));
+          await fetch("api/generate");
+        });
+    }
   };
 
   useEffect(() => {
     if (allFile && Object.keys(allFile).length > 0) {
-      Object.keys(allFile).forEach((item) => {
-        getBase64(allFile[item] as RcFile, (url) => {
-          setImgUrl((prev) => [
-            ...prev,
-            {
-              base64: url,
-              source: allFile[item]?.webkitRelativePath,
-            },
-          ]);
-        });
-      });
+      filesToBase64(Object.keys(allFile).map((x) => allFile[x]));
     }
   }, [allFile]);
-
-  useEffect(() => {
-    (async () => {
-      if (imgUrl && Object.keys(imgUrl).length > 0) {
-        await fetch("/api/upload", {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            listFile: imgUrl,
-          }),
-        })
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
-            setResult(data);
-          });
-      }
-    })();
-  }, [imgUrl]);
 
   return (
     <div className="step-2">

@@ -7,23 +7,10 @@ type Data = {
 
 const treeBG = dirTree("./public/images/input_images/background");
 const treeFace = dirTree("./public/images/input_images/face");
-const treeEyes = dirTree("./public/images/input_images/left_eye");
-
-var totalBG = 0;
-var totalFace = 0;
-var totalEyes = 0;
-
-treeBG?.children?.forEach(item => {
-  return totalBG = totalBG + (item?.children?.length || 0)
-})
-
-treeFace?.children?.forEach(item => {
-  return totalFace = totalFace + (item?.children?.length || 0)
-})
-
-treeEyes?.children?.forEach(item => {
-  return totalEyes = totalEyes + (item?.children?.length || 0)
-})
+const treeLeftEye = dirTree("./public/images/input_images/left_eye");
+const treeMouth = dirTree("./public/images/input_images/mouth");
+const treeAccessory = dirTree("./public/images/input_images/accessory");
+const treeRightEye = dirTree("./public/images/input_images/right_eye");
 
 
 export default async function handler(
@@ -41,7 +28,10 @@ export default async function handler(
         },
         treeBG,
         treeFace,
-        treeEyes
+        treeLeftEye,
+        treeMouth,
+        treeAccessory,
+        treeRightEye
       );
     } catch (e) {
       res.status(400).json({
